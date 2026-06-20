@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday Birthday</title>
+<title>Happy Birthday</title>
 
 <style>
 body{
@@ -138,6 +138,32 @@ const msg=[
 "自由尽兴，身体健康。",
 "永远支持你的小孙 ❤️"
 ];
+
+let i=0;
+
+function typeLine(){
+    if(i < msg.length){
+
+        let line=document.createElement("div");
+        line.className="line";
+        document.getElementById("text").appendChild(line);
+
+        let j=0;
+
+        function typeChar(){
+            if(j < msg[i].length){
+                line.textContent += msg[i][j];
+                j++;
+                setTimeout(typeChar,80);
+            }else{
+                i++;
+                setTimeout(typeLine,500);
+            }
+        }
+
+        typeChar();
+    }
+}
 
 let i=0;
 
