@@ -1,29 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday DX</title>
 
+<!-- ================= CSS（绝对不能乱） ================= -->
 <style>
-    #text{
-    width:80%;
-    margin:auto;
-    text-align:center;
-}
-
-.line{
-    display:block;
-    font-size:20px;
-    margin:6px 0;
-    opacity:0;
-    animation:fadeIn 0.5s forwards;
-}
-
-@keyframes fadeIn{
-    from{opacity:0; transform:translateY(10px);}
-    to{opacity:1; transform:translateY(0);}
-}
 body{
     margin:0;
     font-family:Arial;
@@ -44,12 +28,12 @@ body{
     text-align:center;
 }
 
+/* 按钮 */
 button{
     padding:12px 20px;
     border:none;
     border-radius:10px;
     font-size:16px;
-    margin-top:20px;
 }
 
 /* 🎬 视频 */
@@ -77,7 +61,7 @@ video{
     position:relative;
 }
 
-/* 遮罩 */
+/* 黑色遮罩 */
 .overlay{
     position:absolute;
     width:100%;
@@ -85,7 +69,7 @@ video{
     background:rgba(0,0,0,0.45);
 }
 
-/* 内容 */
+/* 内容区 */
 .content{
     position:relative;
     top:20%;
@@ -97,25 +81,35 @@ video{
     cursor:pointer;
 }
 
-/* 字幕 */
+/* ⭐ 字幕（不会乱的关键） */
+#text{
+    width:80%;
+    margin:auto;
+    text-align:center;
+}
+
+/* 每一行 */
 .line{
+    display:block;
     font-size:20px;
     margin:6px 0;
     opacity:0;
     animation:fadeIn 0.5s forwards;
 }
 
+/* 动画 */
 @keyframes fadeIn{
     from{opacity:0; transform:translateY(10px);}
     to{opacity:1; transform:translateY(0);}
 }
+
 </style>
 </head>
 
 <body>
 
 <!-- 🎵 音乐 -->
-<audio id="bgm" loop preload="auto">
+<audio id="bgm" loop>
     <source src="music.mp3">
 </audio>
 
@@ -128,12 +122,13 @@ video{
 
 <!-- 🎂 封面 -->
 <div id="cover">
-    <h1>🎂 Happy Birthday </h1>
-    <button onclick="start()">进入</button>
+    <h1>🎂 Happy Birthday</h1>
+    <button onclick="start()">DD</button>
 </div>
 
 <!-- 🎂 主页面 -->
 <div id="main">
+
     <div class="overlay"></div>
 
     <div class="content">
@@ -143,8 +138,10 @@ video{
 
         <div id="text"></div>
     </div>
+
 </div>
 
+<!-- ================= JS（逻辑稳定区） ================= -->
 <script>
 
 const msg=[
@@ -159,60 +156,9 @@ const msg=[
 
 let i=0;
 
-function typeLine(){
-    if(i < msg.length){
-
-        let line=document.createElement("div");
-        line.className="line";
-        document.getElementById("text").appendChild(line);
-
-        let j=0;
-
-        function typeChar(){
-            if(j < msg[i].length){
-                line.textContent += msg[i][j];
-                j++;
-                setTimeout(typeChar,80);
-            }else{
-                i++;
-                setTimeout(typeLine,500);
-            }
-        }
-
-        typeChar();
-    }
-}
-
-let i=0;
-
-function typeLine(){
-    if(i < msg.length){
-
-        let line=document.createElement("div");
-        line.className="line";
-        document.getElementById("text").appendChild(line);
-
-        let j=0;
-
-        function typeChar(){
-            if(j < msg[i].length){
-                line.textContent += msg[i][j];
-                j++;
-                setTimeout(typeChar,80);
-            }else{
-                i++;
-                setTimeout(typeLine,500);
-            }
-        }
-
-        typeChar();
-    }
-}
-
-let i=0;
-
-// ▶️ 开始
+/* 🚀 开始 */
 function start(){
+
     document.getElementById("cover").style.display="none";
     document.getElementById("videoPage").style.display="block";
 
@@ -225,11 +171,12 @@ function start(){
     };
 
     // 防卡死
-    setTimeout(showMain,25000);
+    setTimeout(showMain,5000);
 }
 
-// 🎬 进入主页面
+/* 🎬 主页面 */
 function showMain(){
+
     document.getElementById("videoPage").style.display="none";
     document.getElementById("main").style.display="block";
 
@@ -238,24 +185,26 @@ function showMain(){
     typeLine();
 }
 
-// ✍️ 电影字幕
+/* ✍️ 字幕（绝不乱版本） */
 function typeLine(){
-    if(i<msg.length){
+
+    if(i < msg.length){
 
         let line=document.createElement("div");
         line.className="line";
+
         document.getElementById("text").appendChild(line);
 
         let j=0;
 
         function typeChar(){
-            if(j<msg[i].length){
-                line.innerHTML+=msg[i][j];
+            if(j < msg[i].length){
+                line.textContent += msg[i][j];
                 j++;
-                setTimeout(typeChar,200);
+                setTimeout(typeChar,90); // ⭐ 打字速度（可改）
             }else{
                 i++;
-                setTimeout(typeLine,600);
+                setTimeout(typeLine,600); // 下一行间隔
             }
         }
 
@@ -263,7 +212,7 @@ function typeLine(){
     }
 }
 
-// 🎂 蛋糕互动
+/* 🎂 蛋糕互动 */
 function cakeClick(){
     document.querySelector(".cake").innerHTML="🎂✨";
 }
