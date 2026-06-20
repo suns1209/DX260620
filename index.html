@@ -3,9 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday</title>
+<title>Happy Birthday DX</title>
 
 <style>
+    #text{
+    width:80%;
+    margin:auto;
+    text-align:center;
+}
+
+.line{
+    display:block;
+    font-size:20px;
+    margin:6px 0;
+    opacity:0;
+    animation:fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+}
 body{
     margin:0;
     font-family:Arial;
@@ -110,7 +128,7 @@ video{
 
 <!-- 🎂 封面 -->
 <div id="cover">
-    <h1>🎂 Birthday Surprise</h1>
+    <h1>🎂 Happy Birthday </h1>
     <button onclick="start()">进入</button>
 </div>
 
@@ -167,6 +185,32 @@ function typeLine(){
 
 let i=0;
 
+function typeLine(){
+    if(i < msg.length){
+
+        let line=document.createElement("div");
+        line.className="line";
+        document.getElementById("text").appendChild(line);
+
+        let j=0;
+
+        function typeChar(){
+            if(j < msg[i].length){
+                line.textContent += msg[i][j];
+                j++;
+                setTimeout(typeChar,80);
+            }else{
+                i++;
+                setTimeout(typeLine,500);
+            }
+        }
+
+        typeChar();
+    }
+}
+
+let i=0;
+
 // ▶️ 开始
 function start(){
     document.getElementById("cover").style.display="none";
@@ -181,7 +225,7 @@ function start(){
     };
 
     // 防卡死
-    setTimeout(showMain,20000);
+    setTimeout(showMain,25000);
 }
 
 // 🎬 进入主页面
