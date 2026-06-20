@@ -13,8 +13,22 @@ body{
     overflow:hidden;
 }
 
-/* 🎬 视频 */
+/* 🎬 封面 */
+#cover{
+    width:100%;
+    height:100vh;
+    background:linear-gradient(135deg,#ff758c,#ff7eb3);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    text-align:center;
+}
+
+/* 🎬 视频页 */
 #videoPage{
+    display:none;
     width:100%;
     height:100vh;
     background:black;
@@ -57,25 +71,17 @@ video{
     cursor:pointer;
 }
 
-/* 字幕容器 */
+/* 字幕 */
 #text{
     width:80%;
     margin:auto;
     text-align:center;
 }
 
-/* 每行字幕 */
 .line{
     display:block;
     font-size:20px;
     margin:6px 0;
-    opacity:0;
-    animation:fadeIn 0.5s forwards;
-}
-
-@keyframes fadeIn{
-    from{opacity:0; transform:translateY(10px);}
-    to{opacity:1; transform:translateY(0);}
 }
 </style>
 </head>
@@ -86,6 +92,12 @@ video{
 <audio id="bgm" loop>
     <source src="music.mp3">
 </audio>
+
+<!-- 🎬 封面 -->
+<div id="cover">
+    <h1>🎂 Happy Birthday</h1>
+    <button onclick="start()">DD</button>
+</div>
 
 <!-- 🎬 视频 -->
 <div id="videoPage">
@@ -111,10 +123,6 @@ video{
 
 <script>
 
-/* ⭐ 防重复启动锁（核心） */
-let started = false;
-
-/* ✍️ 字幕内容 */
 const msg=[
 "丁丁，生日快乐 🎉",
 "工作顺利，烦恼少少。",
@@ -126,29 +134,33 @@ const msg=[
 ];
 
 let i=0;
+let started=false;
 
-/* 🚀 启动 */
-function startVideo(){
+/* 🚀 点击封面 */
+function start(){
+
+    document.getElementById("cover").style.display="none";
+    document.getElementById("videoPage").style.display="block";
 
     let v=document.getElementById("video");
 
+    // ▶️ 播放视频
     v.play().catch(()=>{});
 
-    /* ⭐ 关键：只用结束触发 */
-    v.onended=function(){
-        showMain();
-    };
+    // 🎬 视频结束进入主页（唯一入口）
+    v.onended=showMain;
 }
 
-/* 🎬 显示主页面 */
+/* 🎬 进入主页面（防重复） */
 function showMain(){
 
-    if(started) return;   // ⭐ 防止重复进入
-    started = true;
+    if(started) return;
+    started=true;
 
     document.getElementById("videoPage").style.display="none";
     document.getElementById("main").style.display="block";
 
+    // 🎵 音乐（必须用户触发链路内）
     document.getElementById("bgm").play().catch(()=>{});
 
     typeLine();
@@ -161,7 +173,6 @@ function typeLine(){
 
         let line=document.createElement("div");
         line.className="line";
-
         document.getElementById("text").appendChild(line);
 
         let j=0;
@@ -173,7 +184,7 @@ function typeLine(){
                 setTimeout(typeChar,90);
             }else{
                 i++;
-                setTimeout(typeLine,600);
+                setTimeout(typeLine,500);
             }
         }
 
@@ -181,15 +192,10 @@ function typeLine(){
     }
 }
 
-/* 🎂 蛋糕 */
+/* 🎂 蛋糕互动 */
 function cakeClick(){
     document.querySelector(".cake").innerHTML="🎂✨";
 }
-
-/* 🚀 自动启动视频（页面加载后执行） */
-window.onload=function(){
-    startVideo();
-};
 
 </script>
 
