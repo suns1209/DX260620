@@ -13,7 +13,7 @@ body{
     overflow:hidden;
 }
 
-/* 封面 */
+/* 🎬 封面 */
 #cover{
     width:100%;
     height:100vh;
@@ -23,9 +23,10 @@ body{
     justify-content:center;
     align-items:center;
     color:white;
+    text-align:center;
 }
 
-/* 视频 */
+/* 🎬 视频页 */
 #videoPage{
     display:none;
     width:100%;
@@ -39,7 +40,7 @@ video{
     object-fit:cover;
 }
 
-/* 主页面 */
+/* 🎂 主页面 */
 #main{
     display:none;
     width:100%;
@@ -87,44 +88,41 @@ video{
 
 <body>
 
-<!-- 音乐 -->
-<audio id="bgm" loop preload="none">
+<!-- 🎵 音乐 -->
+<audio id="bgm" loop>
     <source src="music.mp3">
 </audio>
 
-<!-- 封面 -->
+<!-- 🎬 封面 -->
 <div id="cover">
     <h1>🎂 Happy Birthday</h1>
     <button onclick="start()">DD</button>
 </div>
 
-<!-- 视频（优化 preload） -->
+<!-- 🎬 视频 -->
 <div id="videoPage">
-    <video id="video" playsinline preload="metadata">
+    <video id="video" playsinline>
         <source src="intro.mp4" type="video/mp4">
     </video>
 </div>
 
-<!-- 主页面 -->
+<!-- 🎂 主页面 -->
 <div id="main">
+
     <div class="overlay"></div>
 
     <div class="content">
         <h1>Happy Birthday 🎉</h1>
 
-        <div class="cake" onclick="cakeClick()">🎂✨</div>
+        <div class="cake" onclick="cakeClick()">🎂🎂</div>
 
         <div id="text"></div>
     </div>
+
 </div>
 
 <script>
 
-/* ===== 防卡核心锁 ===== */
-let started=false;
-let i=0;
-
-/* 文案 */
 const msg=[
 "丁丁，生日快乐 🎉",
 "工作顺利，烦恼少少。",
@@ -132,35 +130,28 @@ const msg=[
 "都能看到新的风景。",
 "遇到更多爱你的人，",
 "自由尽兴，身体健康。",
-"------小孙 ❤️"
+"------孙孙 ❤️"
 ];
 
-/* ===== 启动 ===== */
+let i=0;
+let started=false;
+
+/* 🚀 点击封面 */
 function start(){
 
-    const cover=document.getElementById("cover");
-    const videoPage=document.getElementById("videoPage");
-    const video=document.getElementById("video");
+    document.getElementById("cover").style.display="none";
+    document.getElementById("videoPage").style.display="block";
 
-    cover.style.display="none";
-    videoPage.style.display="block";
+    let v=document.getElementById("video");
 
-    // ⚡ 用户点击后再加载视频
-    video.load();
+    // ▶️ 播放视频
+    v.play().catch(()=>{});
 
-    video.play().catch(()=>{});
-
-    video.onended=showMain;
-
-    // ⚡ 防卡死（8秒兜底）
-    setTimeout(()=>{
-        if(!started){
-            showMain();
-        }
-    },10000);
+    // 🎬 视频结束进入主页（唯一入口）
+    v.onended=showMain;
 }
 
-/* ===== 主页面 ===== */
+/* 🎬 进入主页面（防重复） */
 function showMain(){
 
     if(started) return;
@@ -169,40 +160,41 @@ function showMain(){
     document.getElementById("videoPage").style.display="none";
     document.getElementById("main").style.display="block";
 
-    // 音乐（必须用户链路触发）
+    // 🎵 音乐（必须用户触发链路内）
     document.getElementById("bgm").play().catch(()=>{});
 
     typeLine();
 }
 
-/* ===== 字幕（稳定不卡版） ===== */
+/* ✍️ 字幕（稳定版） */
 function typeLine(){
 
-    if(i >= msg.length) return;
+    if(i < msg.length){
 
-    let line=document.createElement("div");
-    line.className="line";
-    document.getElementById("text").appendChild(line);
+        let line=document.createElement("div");
+        line.className="line";
+        document.getElementById("text").appendChild(line);
 
-    let j=0;
+        let j=0;
 
-    function typing(){
-        if(j < msg[i].length){
-            line.textContent += msg[i][j];
-            j++;
-            setTimeout(typing,85);
-        }else{
-            i++;
-            setTimeout(typeLine,500);
+        function typeChar(){
+            if(j < msg[i].length){
+                line.textContent += msg[i][j];
+                j++;
+                setTimeout(typeChar,90);
+            }else{
+                i++;
+                setTimeout(typeLine,500);
+            }
         }
-    }
 
-    typing();
+        typeChar();
+    }
 }
 
-/* ===== 蛋糕互动 ===== */
+/* 🎂 蛋糕互动 */
 function cakeClick(){
-    document.querySelector(".cake").innerHTML="🎂💖";
+    document.querySelector(".cake").innerHTML="🎂✨";
 }
 
 </script>
