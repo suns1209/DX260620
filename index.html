@@ -26,6 +26,14 @@ body{
     text-align:center;
 }
 
+#cover button{
+    padding:12px 28px;
+    border:none;
+    border-radius:30px;
+    font-size:20px;
+    cursor:pointer;
+}
+
 /* 🎬 视频页 */
 #videoPage{
     display:none;
@@ -63,12 +71,18 @@ video{
 .content{
     position:relative;
     top:20%;
+    z-index:2;
 }
 
 /* 蛋糕 */
 .cake{
     font-size:90px;
     cursor:pointer;
+    transition:.3s;
+}
+
+.cake:hover{
+    transform:scale(1.08);
 }
 
 /* 字幕 */
@@ -82,6 +96,39 @@ video{
     display:block;
     font-size:20px;
     margin:6px 0;
+}
+
+/* 🎁 图片弹窗 */
+#photoModal{
+    display:none;
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.88);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+#photoModal img{
+    max-width:90%;
+    max-height:85%;
+    border-radius:16px;
+    box-shadow:0 0 30px rgba(255,255,255,.5);
+    animation:zoom .5s ease;
+}
+
+@keyframes zoom{
+    from{
+        transform:scale(.5);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
 }
 </style>
 </head>
@@ -121,6 +168,11 @@ video{
 
 </div>
 
+<!-- 🎁 照片弹窗 -->
+<div id="photoModal" onclick="closePhoto()">
+    <img src="photo.webp" alt="Birthday Photo">
+</div>
+
 <script>
 
 const msg=[
@@ -144,47 +196,54 @@ function start(){
 
     let v=document.getElementById("video");
 
-    // ▶️ 播放视频
     v.play().catch(()=>{});
 
-    // 🎬 视频结束进入主页（唯一入口）
     v.onended=showMain;
 }
 
-/* 🎬 进入主页面（防重复） */
+/* 🎬 进入主页 */
 function showMain(){
 
     if(started) return;
+
     started=true;
 
     document.getElementById("videoPage").style.display="none";
     document.getElementById("main").style.display="block";
 
-    // 🎵 音乐（必须用户触发链路内）
     document.getElementById("bgm").play().catch(()=>{});
 
     typeLine();
 }
 
-/* ✍️ 字幕（稳定版） */
+/* ✍️ 打字机效果 */
 function typeLine(){
 
     if(i < msg.length){
 
         let line=document.createElement("div");
         line.className="line";
+
         document.getElementById("text").appendChild(line);
 
         let j=0;
 
         function typeChar(){
+
             if(j < msg[i].length){
+
                 line.textContent += msg[i][j];
+
                 j++;
+
                 setTimeout(typeChar,90);
+
             }else{
+
                 i++;
+
                 setTimeout(typeLine,500);
+
             }
         }
 
@@ -192,11 +251,19 @@ function typeLine(){
     }
 }
 
-/* 🎂 蛋糕互动 */
+/* 🎂 点击蛋糕 */
 function cakeClick(){
-    document.querySelector(".cake").innerHTML="🎂✨";
+
+    document.querySelector(".cake").innerHTML="🕯️🎂";
+
+    document.getElementById("photoModal").style.display="flex";
 }
 
+/* ❌ 关闭照片 */
+function closePhoto(){
+
+    document.getElementById("photoModal").style.display="none";
+}
 </script>
 
 </body>
